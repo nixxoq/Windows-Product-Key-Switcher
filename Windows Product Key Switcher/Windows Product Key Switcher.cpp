@@ -1,5 +1,4 @@
 #define NOMINMAX
-#define _CRT_SECURE_NO_WARNINGS
 #define w10productkey "W269N-WFGWX-YVC9B-4J6C9-T83GX"
 #include <iostream>
 #include <string>
