@@ -21,3 +21,8 @@ Work with:
 - [ ] Support Windows 11/10 Enterprise G
 - [ ] Support Windows 11/10 Enterprise G N
 - [ ] Fill missed [code](https://github.com/Snaky1a/Windows-Product-Key-Switcher/blob/main/Windows%20Product%20Key%20Switcher/Windows%20Product%20Key%20Switcher.cpp#L113), [1](https://github.com/Snaky1a/Windows-Product-Key-Switcher/blob/main/Windows%20Product%20Key%20Switcher/Windows%20Product%20Key%20Switcher.cpp#L113)
+
+
+
+#### P.S
+This is my first project on C++, so please don't beat me up for bad code.
