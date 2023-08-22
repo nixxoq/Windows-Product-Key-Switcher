@@ -1,6 +1,6 @@
-# Windows Product Key Switcher (WPK Switcher)
+# [Work In Progress] Windows Product Key Switcher (WPK Switcher)
 
-### Just a Work-In-Progress program, when you can convert current Windows edition to another
+### Just a program that allows you to convert the current edition of Windows to another.
 
 Work with:
 - Windows 7 Professional VL, Professional VL (N), Professional VL (E), Enterprise VL, Enterprise VL (N), Enterprise VL (E)
@@ -20,4 +20,4 @@ Work with:
 - [ ] Support Windows 11/10 Enterprise N
 - [ ] Support Windows 11/10 Enterprise G
 - [ ] Support Windows 11/10 Enterprise G N
-- [ ] Fill missed [code](https://github.com/Snaky1a/Windows-Product-Key-Switcher/blob/main/Windows%20Product%20Key%20Switcher/Windows%20Product%20Key%20Switcher.cpp#L113) [1](https://github.com/Snaky1a/Windows-Product-Key-Switcher/blob/main/Windows%20Product%20Key%20Switcher/Windows%20Product%20Key%20Switcher.cpp#L113)
+- [ ] Fill missed [code](https://github.com/Snaky1a/Windows-Product-Key-Switcher/blob/main/Windows%20Product%20Key%20Switcher/Windows%20Product%20Key%20Switcher.cpp#L113), [1](https://github.com/Snaky1a/Windows-Product-Key-Switcher/blob/main/Windows%20Product%20Key%20Switcher/Windows%20Product%20Key%20Switcher.cpp#L113)
