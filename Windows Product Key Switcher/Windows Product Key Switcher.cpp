@@ -111,6 +111,7 @@ int ActivateWindows(const std::string productkey) {
 
 
 void Windows10Activation() {
+	// TODO: complete this code
 	std::cout << w10productkey << std::endl;
 	ActivateWindows("test");
 }
@@ -133,6 +134,7 @@ int main()
 	std::cout << ">>> ";
 	std::cin >> value;
 
+	// TODO: complete this code (2)
 	if (value == 1) { Windows11Menu(); }
 	else if (value == 2) { Windows10Menu(); }
 
