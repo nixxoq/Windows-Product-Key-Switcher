@@ -7,7 +7,21 @@
 #include <shellapi.h>
 #include <vector>
 
-void Windows10Activation();
+void WindowsActivation();
+
+int Confirmation()
+{
+	std::string temp;
+	std::cout << "Are you sure you want to activate Windows?\nY - activate Windows\nN - back to menu" << std::endl;
+	std::cout << ">>> ";
+	std::cin >> temp;
+	std::transform(temp.begin(), temp.end(), temp.begin(), [](unsigned char c) { return std::tolower(c); });
+
+	// 0 - yes, -1 - no
+	std::cout << temp << std::endl;
+	return 0 ? temp == "y" : -1;
+
+}
 
 void printCenteredLine(const std::string& text, char filler, int totalWidth)
 {
@@ -21,7 +35,8 @@ void printCenteredLine(const std::string& text, char filler, int totalWidth)
 void printWrappedText(const std::string& text, const int lineWidth, char filler)
 {
 	size_t startPos = 0;
-	while (startPos < text.length()) {
+	while (startPos < text.length())
+	{
 		size_t endPos = startPos + lineWidth;
 		if (endPos < text.length() && text[endPos] != ' ') { while (endPos > startPos && text[endPos] != ' ') { --endPos; } }
 		std::string line = text.substr(startPos, endPos - startPos);
@@ -89,20 +104,22 @@ void Windows10Menu() {
 	int value;
 	std::cout << ">>> ";
 	std::cin >> value;
-	Windows10Activation();
+	WindowsActivation();
 }
 
 
 int ActivateWindows(const std::string productkey) {
-	std::string productKey = "/ipk " + (std::string)w10productkey;
+	std::string productKey = "/ipk " + productkey;
 
 	HINSTANCE hInstance = ShellExecuteA(nullptr, "open", "C:\\Windows\\System32\\slmgr.vbs", productKey.c_str(), nullptr, SW_HIDE);
-	if ((intptr_t)hInstance > 32) {
+	if ((intptr_t)hInstance > 32)
+	{
 		WaitForSingleObject(hInstance, INFINITE);
 		CloseHandle(hInstance);
 		return 0;
 	}
-	else {
+	else
+	{
 		DWORD error = GetLastError();
 		printf("Error: %d\n", error);
 		return 1;
@@ -110,10 +127,10 @@ int ActivateWindows(const std::string productkey) {
 }
 
 
-void Windows10Activation() {
-	// TODO: complete this code
-	std::cout << w10productkey << std::endl;
-	ActivateWindows("test");
+void WindowsActivation()
+{
+	Confirmation();
+	//ActivateWindows(w10productkey);
 }
 
 
@@ -137,6 +154,10 @@ int main()
 	// TODO: complete this code (2)
 	if (value == 1) { Windows11Menu(); }
 	else if (value == 2) { Windows10Menu(); }
+
+	std::cout << "Press any key to exit..." << std::endl;
+	std::cin.ignore();
+	std::cin.get();
 
 	return 0;
 }
