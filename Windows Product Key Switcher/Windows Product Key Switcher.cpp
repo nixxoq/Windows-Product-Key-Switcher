@@ -171,11 +171,10 @@ void Windows1110Activation(int option)
 	std::map<std::string, std::wstring> w10_keys =
 	{
 		{"1", L"W269N-WFGWX-YVC9B-4J6C9-T83GX"}, // professional
-		{"2", L"MH37W-N47XK-V7XM9-C7227-GCQG9"}, // professional N
-		{"3", L"NPPR9-FWDCX-D2C8J-H872K-2YT43"}, // education 
-		{"4", L"TX9XD-98N7V-6WMQ6-BX7FG-H8Q99"}, // home
-		{"5", L"7HNRX-D7KGG-3K4RQ-4WPJ4-YTDFH"}, // home single language
-		{"6", L"M7XTQ-FN8P6-TTKYV-9D4CC-J462D"}, // ltsc
+		{"2", L"NPPR9-FWDCX-D2C8J-H872K-2YT43"}, // enterprise
+		{"3", L"TX9XD-98N7V-6WMQ6-BX7FG-H8Q99"}, // home
+		{"4", L"NPPR9-FWDCX-D2C8J-H872K-2YT43"}, // education
+		{"5", L"M7XTQ-FN8P6-TTKYV-9D4CC-J462D"}, // ltsc
 	};
 
 
@@ -188,8 +187,9 @@ void Windows1110Activation(int option)
 	{
 		if (option <= 6)
 		{
-			auto result = w10_keys.find(std::to_string(option));
-			if (result != w10_keys.end()) { ActivateWindows(result->second, false); }
+			//std::map<std::string, std::string>::iterator res;
+			auto res = w10_keys.find(std::to_string((option == 5) ? 2 : (option == 6) ? 1 : option));
+			if (res != w10_keys.end()) { ActivateWindows(res->second, false); }
 		}
 		else
 		{
