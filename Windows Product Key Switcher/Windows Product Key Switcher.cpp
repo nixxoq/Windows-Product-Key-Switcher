@@ -187,7 +187,6 @@ void Windows1110Activation(int option)
 	{
 		if (option <= 6)
 		{
-			//std::map<std::string, std::string>::iterator res;
 			auto res = w10_keys.find(std::to_string((option == 5) ? 2 : (option == 6) ? 1 : option));
 			if (res != w10_keys.end()) { ActivateWindows(res->second, false); }
 		}
