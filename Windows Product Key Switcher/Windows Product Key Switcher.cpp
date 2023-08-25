@@ -1,13 +1,18 @@
 #define NOMINMAX
-#define w10productkey "W269N-WFGWX-YVC9B-4J6C9-T83GX"
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <string>
 #include <algorithm>
 #include <Windows.h>
 #include <shellapi.h>
 #include <vector>
+#include <map>
+#include <cstdlib>
+#include <locale>
+#include <codecvt>
 
-void WindowsActivation();
+void Windows1110Activation(int option);
+void MainMenu();
 
 int Confirmation()
 {
@@ -15,11 +20,10 @@ int Confirmation()
 	std::cout << "Are you sure you want to activate Windows?\nY - activate Windows\nN - back to menu" << std::endl;
 	std::cout << ">>> ";
 	std::cin >> temp;
-	std::transform(temp.begin(), temp.end(), temp.begin(), [](unsigned char c) { return std::tolower(c); });
+	std::transform(temp.begin(), temp.end(), temp.begin(), [](int c) { return std::tolower(c); });
 
 	// 0 - yes, -1 - no
-	std::cout << temp << std::endl;
-	return 0 ? temp == "y" : -1;
+	return (temp == "y") ? 0 : -1;
 
 }
 
@@ -79,6 +83,11 @@ void Windows11Menu() {
 			"| 9. Windows 11 to Windows 11 LTSC                                        |",
 	};
 	GenerateMessage("Select choice", choices);
+
+	int value;
+	std::cout << ">>> ";
+	std::cin >> value;
+	Windows1110Activation(value);
 }
 
 void Windows10Menu() {
@@ -104,38 +113,95 @@ void Windows10Menu() {
 	int value;
 	std::cout << ">>> ";
 	std::cin >> value;
-	WindowsActivation();
+	Windows1110Activation(value);
 }
 
 
-int ActivateWindows(const std::string productkey) {
-	std::string productKey = "/ipk " + productkey;
+int RunSlmgr(std::wstring param) {
+	std::wstring scriptRelativePath = L"System32\\slmgr.vbs " + param;
 
-	HINSTANCE hInstance = ShellExecuteA(nullptr, "open", "C:\\Windows\\System32\\slmgr.vbs", productKey.c_str(), nullptr, SW_HIDE);
-	if ((intptr_t)hInstance > 32)
+	WCHAR fullPath[MAX_PATH];
+	swprintf(fullPath, MAX_PATH, L"%s\\%s", _wgetenv(L"windir"), scriptRelativePath.c_str());
+	HINSTANCE result = ShellExecuteW(
+		NULL,
+		L"open",
+		L"C:\\Windows\\System32\\cscript.exe",
+		fullPath,
+		NULL,
+		SW_SHOWMINNOACTIVE
+	);
+
+	// 0 - false, 1 - true
+	if ((INT_PTR)result <= 32)
 	{
-		WaitForSingleObject(hInstance, INFINITE);
-		CloseHandle(hInstance);
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+		std::cout << "[ERROR] slmgr with params " << converter.to_bytes(param) << " failed. Error code " << (INT_PTR)result << std::endl;
 		return 0;
 	}
 	else
 	{
-		DWORD error = GetLastError();
-		printf("Error: %d\n", error);
 		return 1;
 	}
 }
 
 
-void WindowsActivation()
-{
-	Confirmation();
-	//ActivateWindows(w10productkey);
+int ActivateWindows(const std::wstring productkey, bool ltsc) {
+	std::wstring productKey = L"/ipk " + productkey;
+
+	RunSlmgr(L"/upk");
+	if (ltsc)
+	{
+		RunSlmgr(L"/rilc");
+		RunSlmgr(L"/upk");
+		RunSlmgr(L"/ckms");
+		RunSlmgr(L"/cpky");
+	}
+
+	if (RunSlmgr(productKey) == 1)
+	{
+		std::cout << "Activation completed." << std::endl;
+	};
+	return 0;
 }
 
 
-int main()
+void Windows1110Activation(int option)
 {
+	// Windows 10/11
+	std::map<std::string, std::wstring> w10_keys =
+	{
+		{"1", L"W269N-WFGWX-YVC9B-4J6C9-T83GX"}, // professional
+		{"2", L"MH37W-N47XK-V7XM9-C7227-GCQG9"}, // professional N
+		{"3", L"NPPR9-FWDCX-D2C8J-H872K-2YT43"}, // education 
+		{"4", L"TX9XD-98N7V-6WMQ6-BX7FG-H8Q99"}, // home
+		{"5", L"7HNRX-D7KGG-3K4RQ-4WPJ4-YTDFH"}, // home single language
+		{"6", L"M7XTQ-FN8P6-TTKYV-9D4CC-J462D"}, // ltsc
+	};
+
+
+	int result = Confirmation();
+	if (result == -1)
+	{
+		MainMenu();
+	}
+	else
+	{
+		if (option <= 6)
+		{
+			auto result = w10_keys.find(std::to_string(option));
+			if (result != w10_keys.end()) { ActivateWindows(result->second, false); }
+		}
+		else
+		{
+			std::cout << "This option is not implemented. Wait new release :)" << std::endl;
+		}
+	}
+}
+
+
+void MainMenu()
+{
+	std::system("cls");
 	std::vector<std::string> menu =
 	{
 		"---------------------",
@@ -154,10 +220,17 @@ int main()
 	// TODO: complete this code (2)
 	if (value == 1) { Windows11Menu(); }
 	else if (value == 2) { Windows10Menu(); }
+	else { std::cout << "This option is not implemented. Wait new release! :)" << std::endl; }
 
 	std::cout << "Press any key to exit..." << std::endl;
 	std::cin.ignore();
 	std::cin.get();
+	exit(0);
+}
 
+
+int main()
+{
+	MainMenu();
 	return 0;
 }
