@@ -21,4 +21,5 @@ Work with:
 
 
 #### P.S
-This is my first project on C++, so please don't beat me up for bad code.
+1. This is my first project on C++, so please don't beat me up for bad code.
+2. If you don't know how to build this, just download WPK from [releases](https://github.com/Snaky1a/Windows-Product-Key-Switcher/releases)
