@@ -192,6 +192,12 @@ int ActivateWindows(const std::string &productKey, const bool &isLTSC) {
 
             std::cout << "Done!" << std::endl;
             return 0;
+        } else {
+            std::cout << "Couldn't find files directory with needed files, "
+                      << "please download program from github "
+                      << "https://github.com/Snaky1a/Windows-Product-Key-Switcher/releases"
+                      << std::endl;
+            return -1;
         }
     }
 
