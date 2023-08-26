@@ -1,3 +1,0 @@
-J:/Projects/cpp/wpk_switcher/wpk switcher/cmake-build-release/CMakeFiles/wpk_switcher.dir
-J:/Projects/cpp/wpk_switcher/wpk switcher/cmake-build-release/CMakeFiles/edit_cache.dir
-J:/Projects/cpp/wpk_switcher/wpk switcher/cmake-build-release/CMakeFiles/rebuild_cache.dir

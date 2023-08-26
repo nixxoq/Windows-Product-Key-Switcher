@@ -1,9 +1,0 @@
-# ninja log v5
-3	2638	7147841911938657	CMakeFiles/wpk_switcher.dir/wpk/Windows_Product_Key_Switcher.cpp.obj	d6cd2b96041c8380
-2638	2718	7147841912732287	wpk_switcher.exe	1d59d6f9bcfb02c9
-3	95	7147842128807906	build.ninja	9e8d91391b329bec
-1	91	7147842128807906	build.ninja	9e8d91391b329bec
-3	2616	7147842155111759	CMakeFiles/wpk_switcher.dir/wpk/Windows_Product_Key_Switcher.cpp.obj	89aafbe91a95064b
-2616	2957	7147842158490411	wpk_switcher.exe	53e4b7d141331445
-3	2562	7147844101569294	CMakeFiles/wpk_switcher.dir/wpk/Windows_Product_Key_Switcher.cpp.obj	89aafbe91a95064b
-2562	2905	7147844104927958	wpk_switcher.exe	53e4b7d141331445
