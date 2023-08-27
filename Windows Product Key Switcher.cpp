@@ -206,9 +206,7 @@ void MainMenu() {
     if (value == 1) { Windows11Menu(); }
     else if (value == 2) { Windows10Menu(); }
     else { std::cout << "This option is not implemented. Wait new release! :)" << std::endl; }
-
-    std::system("cls");
-    std::cout << "Press any key to exit..." << std::endl;
+    std::cout << "Press any key to exit from program..." << std::endl;
     std::cin.ignore();
     std::cin.get();
     exit(0);
