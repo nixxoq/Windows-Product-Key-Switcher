@@ -216,7 +216,7 @@ void Windows1110Activation(int option) {
                     {"1",  "W269N-WFGWX-YVC9B-4J6C9-T83GX"}, // professional
                     {"2",  "NPPR9-FWDCX-D2C8J-H872K-2YT43"}, // enterprise
                     {"3",  "TX9XD-98N7V-6WMQ6-BX7FG-H8Q99"}, // home
-                    {"4",  "NPPR9-FWDCX-D2C8J-H872K-2YT43"}, // education
+                    {"4",  "NW6C2-QMPVW-D7KKK-3GKT6-VCFB2"}, // education
                     {"5",  "M7XTQ-FN8P6-TTKYV-9D4CC-J462D"}, // LTSC,
                     {"10", "QPM6N-7J2WJ-P88HH-P3YRH-YY74H"}, // IoT LTSC
             };
