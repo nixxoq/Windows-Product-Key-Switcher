@@ -3,7 +3,10 @@
 Work with:
 - Windows 11/10 Education
 - Windows 11/10 Professional
-- Windows 11/10 Enterprise LTSC
+- Windows 11/10 Enterprise LTSC 2019/2021
+- Windows 11/10 Professional N, Education N, Enterprise N, Professional Education N, Professional Education
+- Windows 11/10 Home, Home Single Language, Home N,
+- Windows 11/10 IoT LTSC
 
 
 # TODO:
@@ -11,13 +14,11 @@ Work with:
 - [ ] Support Windows 7 Professional VL, Professional VL (N), Professional VL (E), Enterprise VL, Enterprise VL (N), Enterprise VL (E)
 - [ ] Support Windows 8.0
 - [ ] Support Windows 8.1 Professional, Professional (N), Enterprise, Enterprise (N)
-- [ ] Support Windows 11/10 Professional N
+- [x] Support Windows 11/10 Professional N
 - [ ] Support Windows 11/10 Professional for Workstations
-- [ ] Support Windows 11/10 Professional Education
-- [ ] Support Windows 11/10 Education N
-- [ ] Support Windows 11/10 Enterprise N
-- [ ] Support Windows 11/10 Enterprise G
-- [ ] Support Windows 11/10 Enterprise G N
+- [x] Support Windows 11/10 Professional Education
+- [x] Support Windows 11/10 Education N
+- [x] Support Windows 11/10 Enterprise N
 
 
 #### P.S

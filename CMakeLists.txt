@@ -1,9 +1,8 @@
 cmake_minimum_required(VERSION 3.26)
-project(wpk_switcher)
+project(WPK)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 17)
 
-add_executable(wpk_switcher
-        "wpk/Windows Product Key Switcher.cpp")
+add_executable(WPK "Windows Product Key Switcher.cpp")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++")
+set(CMAKE_BUILD_TYPE Release)

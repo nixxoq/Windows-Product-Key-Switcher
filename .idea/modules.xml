@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/wpk switcher.iml" filepath="$PROJECT_DIR$/.idea/wpk switcher.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/WPK.iml" filepath="$PROJECT_DIR$/.idea/WPK.iml" />
     </modules>
   </component>
 </project>
