@@ -11,7 +11,7 @@ Work with:
 
 
 # TODO:
-- [ ] Support Windows 7 Professional VL, Enterprise
+- [x] Support Windows 7 Professional VL, Enterprise
 - [ ] Support Windows 8.0
 - [ ] Support Windows 8.1 Professional, Professional (N), Enterprise, Enterprise (N)
 - [x] Support Windows 11/10 Professional N
