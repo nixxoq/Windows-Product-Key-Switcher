@@ -7,8 +7,11 @@
 #include <vector>
 #include <map>
 #include <filesystem>
+#include <fmt/format.h>
 
 void Windows1110Activation(int option);
+
+void Windows7Activation(int option);
 
 void MainMenu();
 
@@ -106,20 +109,33 @@ void Windows10Menu() {
 }
 
 
-int ActivateWindows(const std::string &productKey, const bool &isLTSC, const bool &isIoTLTSC) {
+void Windows7Menu() {
+    std::vector<std::string> choices = {
+            "--------------------------------------------",
+            "| 1. Windows 7 Professional                |",
+            "--------------------------------------------",
+            "| 2. Windows 7 Enterprise                  |",
+            "--------------------------------------------"
+    };
+    GenerateMessage("Select choice", choices);
+
+    int value;
+    std::cout << ">>> ";
+    std::cin >> value;
+    Windows7Activation(value);
+}
+
+int ActivateWindows(const std::string &productKey, const bool &isLTSC, const bool &isIoTltsc,
+                    const int &i) {
     char buffer[MAX_PATH];
     GetModuleFileName(nullptr, buffer, MAX_PATH);
     std::string ProgramPath = ((std::string) buffer).substr(0, ((std::string) buffer).find_last_of("\\/"));
     if (std::filesystem::exists(ProgramPath + "\\files")) {
         std::cout << "Unpacking SKU'S..." << std::endl;
-        std::string runCommand =
-                R"(powershell -Command "Expand-Archive -Force ')" + ProgramPath + R"(\files\skus.zip'")";
-        std::system(runCommand.c_str());
-        std::system(R"(powershell "Copy-Item -Path .\skus -Destination %windir%\system32\spp\tokens -Recurse")");
-
-        std::cout << "Cleanup temporally files" << std::endl;
-        runCommand = "rd \"" + ProgramPath + R"("\skus /s /q)";
-        std::system(runCommand.c_str());
+        std::system(fmt::format(
+                R"(powershell -Command "Expand-Archive '{}\files\{}.zip' -Force -DestinationPath $env:windir\system32\spp\tokens\skus\ -erroraction 'silentlycontinue')",
+                ProgramPath,
+                (i == 1) ? "spp10" : (i == 2) ? "spp8.1" : (i == 4) ? "spp7" : "").c_str());
         std::cout << "Registering SKU's, please wait..." << std::endl;
         std::system(R"(cscript.exe //Nologo //B C:\Windows\System32\slmgr.vbs /rilc)");
     } else {
@@ -137,9 +153,11 @@ int ActivateWindows(const std::string &productKey, const bool &isLTSC, const boo
         return 0;
     }
 
-    std::string runCommand = R"(cscript.exe //Nologo //B C:\Windows\System32\slmgr.vbs /ipk )" + productKey;
-    if (std::system(runCommand.c_str()) == 0) { std::cout << "Product key installed successfully." << std::endl; }
-    if (!isIoTLTSC) {
+    if (std::system(fmt::format(R"(cscript.exe //Nologo //B C:\Windows\System32\slmgr.vbs /ipk {})",
+                                productKey).c_str()) == 0) {
+        std::cout << "Product key installed successfully." << std::endl;
+    }
+    if (!isIoTltsc) {
         if (Confirmation("Do you want activate Windows with Online KMS?"
                          "\nY - yes\nN - I want to activate myself / "
                          "I will activate it later") == 0) {
@@ -150,8 +168,7 @@ int ActivateWindows(const std::string &productKey, const bool &isLTSC, const boo
         if (Confirmation("Do you want activate Windows with HWID activation (only for IoT LTSC)?"
                          "\nY - yes\nN - I want to activate myself / "
                          "I will activate it later") == 0) {
-            runCommand = "\"" + ProgramPath + R"(\files\IOT_LTSC_ACTIVATION.cmd")";
-            std::system(runCommand.c_str());
+            std::system(("\"" + ProgramPath + R"(\files\IOT_LTSC_ACTIVATION.cmd")").c_str());
         }
     }
     return 0;
@@ -175,12 +192,24 @@ void Windows1110Activation(int option) {
             {"12", "QPM6N-7J2WJ-P88HH-P3YRH-YY74H"}, // IoT LTSC
     };
 
-
-    int result = Confirmation();
-    if (result == -1) { MainMenu(); }
+    if (Confirmation() == -1) { MainMenu(); }
     else {
         auto res = w10_keys.find(std::to_string(option));
-        if (res != w10_keys.end()) { ActivateWindows(res->second, (option == 11), (option == 12)); }
+        if (res != w10_keys.end()) { ActivateWindows(res->second, (option == 11), (option == 12), 1); }
+    }
+}
+
+void Windows7Activation(int option) {
+    // Windows 10/11
+    std::map<std::string, std::string> w10_keys = {
+            {"1", "FJ82H-XT6CR-J8D7P-XQJJ2-GPDD4"}, // Professional
+            {"2", "33PXH-7Y6KF-2VJC9-XBBR8-HVTHH"}, // Enterprise
+    };
+
+    if (Confirmation() == -1) { MainMenu(); }
+    else {
+        auto res = w10_keys.find(std::to_string(option));
+        if (res != w10_keys.end()) { ActivateWindows(res->second, false, false, 4); }
     }
 }
 
@@ -205,6 +234,7 @@ void MainMenu() {
     // TODO: complete this code (2)
     if (value == 1) { Windows11Menu(); }
     else if (value == 2) { Windows10Menu(); }
+    else if (value == 4) { Windows7Menu(); }
     else { std::cout << "This option is not implemented. Wait new release! :)" << std::endl; }
     std::cout << "Press any key to exit from program..." << std::endl;
     std::cin.ignore();
@@ -215,17 +245,28 @@ void MainMenu() {
 
 int main() {
     if (IsRunAsAdmin()) {
+        int result = std::system(std::string(
+                "powershell -Command \"$PSVersionTable.PSVersion.Major -ge 5\" | findstr False >NUL && exit /B 1").c_str());
+        // 0 - powershell 5+ needed
+        if (result == 1) {
+            std::cout << "For using this program, you need install Powershell 5.1 version or higher"
+                         "\nFollow this link: https://learn.microsoft.com/en-us/powershell/scripting"
+                         "/windows-powershell/wmf/setup/install-configure?view=powershell-5.1#install"
+                         "-wmf-51-for-windows-server-2008-r2-and-windows-7"
+                      << std::endl;
+            std::cout << "Press any key to exit from program..." << std::endl;
+            std::cin.ignore();
+            std::cin.get();
+            exit(0);
+        }
         MainMenu();
     } else {
-        if (IsRunAsAdmin()) { MainMenu(); }
-        else {
-            if (Confirmation("Run program with administrative rights\nY - Run\nN - Exit") != -1) {
-                char buffer[MAX_PATH];
-                GetModuleFileName(nullptr, buffer, MAX_PATH);
-                std::string runCommand =
-                        R"(powershell -Command "Start-Process ')" + (std::string) buffer + "' -Verb RunAs";
-                std::system(runCommand.c_str());
-            } else { exit(0); }
-        }
+        if (Confirmation("Run program with administrative rights\nY - Run\nN - Exit") != -1) {
+            char buffer[MAX_PATH];
+            GetModuleFileName(nullptr, buffer, MAX_PATH);
+            std::string runCommand = fmt::format("powershell -Command \"Start-Process '{}' -Verb RunAs\"",
+                                                 (std::string) buffer);
+            std::system(runCommand.c_str());
+        } else { exit(0); }
     }
 }

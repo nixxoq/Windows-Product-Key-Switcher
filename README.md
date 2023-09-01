@@ -7,11 +7,11 @@ Work with:
 - Windows 11/10 Professional N, Education N, Enterprise N, Professional Education N, Professional Education
 - Windows 11/10 Home, Home Single Language, Home N,
 - Windows 11/10 IoT LTSC
+- Windows 7 Professional VL, Enterprise
 
 
 # TODO:
-- [ ] Support Windows Vista
-- [ ] Support Windows 7 Professional VL, Professional VL (N), Professional VL (E), Enterprise VL, Enterprise VL (N), Enterprise VL (E)
+- [ ] Support Windows 7 Professional VL, Enterprise
 - [ ] Support Windows 8.0
 - [ ] Support Windows 8.1 Professional, Professional (N), Enterprise, Enterprise (N)
 - [x] Support Windows 11/10 Professional N
