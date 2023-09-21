@@ -246,9 +246,9 @@ void MainMenu() {
 int main() {
     if (IsRunAsAdmin()) {
         int result = std::system(std::string(
-                "powershell -Command \"$PSVersionTable.PSVersion.Major -ge 5\" | findstr False >NUL && exit /B 1").c_str());
+                "powershell -Command \"$PSVersionTable.PSVersion.Major -ge 5\" | findstr False >NUL || exit /B 1").c_str());
         // 0 - powershell 5+ needed
-        if (result == 1) {
+        if (result == 0) {
             std::cout << "For using this program, you need install Powershell 5.1 version or higher"
                          "\nFollow this link: https://learn.microsoft.com/en-us/powershell/scripting"
                          "/windows-powershell/wmf/setup/install-configure?view=powershell-5.1#install"
