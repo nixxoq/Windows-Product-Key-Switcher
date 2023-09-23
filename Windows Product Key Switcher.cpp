@@ -8,12 +8,13 @@
 #include <map>
 #include <filesystem>
 #include <fmt/format.h>
+#include <sstream>
 
-void Windows1110Activation(int option);
+void Windows1110Activation(int option, bool silent, bool activate_windows);
 
-void Windows7Activation(int option);
+void Windows7Activation(int option, bool silent, bool activate_windows);
 
-void MainMenu();
+void MainMenu(bool silent, bool activate_windows);
 
 bool IsRunAsAdmin() {
     BOOL isAdmin = FALSE;
@@ -45,98 +46,97 @@ int Confirmation(
 
 }
 
-void GenerateMessage(const std::string &title = "Text", const std::vector<std::string> &arr = {}) {
+void GenerateMessage(const std::string &title = "Text", const std::string &arr = "") {
     std::cout << title << std::endl;
-    for (const std::string &str: arr) { std::cout << str << std::endl; }
+    std::cout << arr << std::endl;
 }
 
-void Windows11Menu() {
-    std::vector<std::string> choices = {
-            "-------------------------------------------",
-            "| 1. Windows 11 Home                      |",
-            "| 2. Windows 11 Home Single Language      |",
-            "| 3. Windows 11 Home N                    |",
-            "-------------------------------------------",
-            "| 4. Windows 11 Professional              |",
-            "| 5. Windows 11 Professional N            |",
-            "| 6. Windows 11 Professional Education    |",
-            "| 7. Windows 11 Professional Education N  |",
-            "-------------------------------------------",
-            "| 8. Windows 11 Education                 |",
-            "| 9. Windows 11 Education N               |",
-            "-------------------------------------------",
-            "| 10. Windows 11 Enterprise               |",
-            "-------------------------------------------",
-            "| 11. Windows 11 LTSC                     |",
-            "| 12. Windows 11 IoT Enterprise LTSC      |",
-            "-------------------------------------------"
-    };
+void Windows11Menu(bool silent, bool activate_windows) {
+    std::string choices = R"(
+-------------------------------------------
+| 1. Windows 11 Home                      |
+| 2. Windows 11 Home Single Language      |
+| 3. Windows 11 Home N                    |
+-------------------------------------------
+| 4. Windows 11 Professional              |
+| 5. Windows 11 Professional N            |
+| 6. Windows 11 Professional Education    |
+| 7. Windows 11 Professional Education N  |
+-------------------------------------------
+| 8. Windows 11 Education                 |
+| 9. Windows 11 Education N               |
+-------------------------------------------
+| 10. Windows 11 Enterprise               |
+-------------------------------------------
+| 11. Windows 11 LTSC 2019/2021           |
+| 12. Windows 11 IoT Enterprise LTSC      |
+-------------------------------------------
+)";
     GenerateMessage("Select choice", choices);
 
     int value;
     std::cout << ">>> ";
     std::cin >> value;
-    Windows1110Activation(value);
+    Windows1110Activation(value, silent, activate_windows);
 }
 
-void Windows10Menu() {
-    std::vector<std::string> choices = {
-            "-------------------------------------------",
-            "| 1. Windows 10 Home                      |",
-            "| 2. Windows 10 Home Single Language      |",
-            "| 3. Windows 10 Home N                    |",
-            "-------------------------------------------",
-            "| 4. Windows 10 Professional              |",
-            "| 5. Windows 10 Professional N            |",
-            "| 6. Windows 10 Professional Education    |",
-            "| 7. Windows 10 Professional Education N  |",
-            "-------------------------------------------",
-            "| 8. Windows 10 Education                 |",
-            "| 9. Windows 10 Education N               |",
-            "-------------------------------------------",
-            "| 10. Windows 10 Enterprise               |",
-            "-------------------------------------------",
-            "| 11. Windows 10 LTSC 2019/2021           |",
-            "| 12. Windows 10 IoT Enterprise LTSC      |",
-            "-------------------------------------------"
-    };
+void Windows10Menu(bool silent, bool activate_windows) {
+    std::string choices = R"(
+-------------------------------------------
+| 1. Windows 10 Home                      |
+| 2. Windows 10 Home Single Language      |
+| 3. Windows 10 Home N                    |
+-------------------------------------------
+| 4. Windows 10 Professional              |
+| 5. Windows 10 Professional N            |
+| 6. Windows 10 Professional Education    |
+| 7. Windows 10 Professional Education N  |
+-------------------------------------------
+| 8. Windows 10 Education                 |
+| 9. Windows 10 Education N               |
+-------------------------------------------
+| 10. Windows 10 Enterprise               |
+-------------------------------------------
+| 11. Windows 10 LTSC 2019/2021           |
+| 12. Windows 10 IoT Enterprise LTSC      |
+-------------------------------------------
+)";
     GenerateMessage("Select choice", choices);
 
     int value;
     std::cout << ">>> ";
     std::cin >> value;
-    Windows1110Activation(value);
+    Windows1110Activation(value, silent, activate_windows);
 }
 
 
-void Windows7Menu() {
-    std::vector<std::string> choices = {
-            "--------------------------------------------",
-            "| 1. Windows 7 Professional                |",
-            "--------------------------------------------",
-            "| 2. Windows 7 Enterprise                  |",
-            "--------------------------------------------"
-    };
+void Windows7Menu(bool silent, bool activate_windows) {
+    std::string choices = R"(
+--------------------------------------------
+| 1. Windows 7 Professional                |
+--------------------------------------------
+| 2. Windows 7 Enterprise                  |
+--------------------------------------------)";
     GenerateMessage("Select choice", choices);
 
     int value;
     std::cout << ">>> ";
     std::cin >> value;
-    Windows7Activation(value);
+    Windows7Activation(value, silent, activate_windows);
 }
 
 int ActivateWindows(const std::string &productKey, const bool &isLTSC, const bool &isIoTltsc,
-                    const int &i) {
+                    const int &i, bool silent, bool activate_windows) {
     char buffer[MAX_PATH];
     GetModuleFileName(nullptr, buffer, MAX_PATH);
     std::string ProgramPath = ((std::string) buffer).substr(0, ((std::string) buffer).find_last_of("\\/"));
     if (std::filesystem::exists(ProgramPath + "\\files")) {
-        std::cout << "Unpacking SKU'S..." << std::endl;
+        if (silent) { std::cout << "Unpacking SKU'S..." << std::endl; }
         std::system(fmt::format(
                 R"(powershell -Command "Expand-Archive '{}\files\{}.zip' -Force -DestinationPath $env:windir\system32\spp\tokens\skus\ -erroraction 'silentlycontinue')",
                 ProgramPath,
                 (i == 1) ? "spp10" : (i == 2) ? "spp8.1" : (i == 4) ? "spp7" : "").c_str());
-        std::cout << "Registering SKU's, please wait..." << std::endl;
+        if (silent) { std::cout << "Registering SKU's, please wait..." << std::endl; }
         std::system(R"(cscript.exe //Nologo //B C:\Windows\System32\slmgr.vbs /rilc)");
     } else {
         std::cout << "Couldn't find files directory with needed files, "
@@ -155,19 +155,28 @@ int ActivateWindows(const std::string &productKey, const bool &isLTSC, const boo
 
     if (std::system(fmt::format(R"(cscript.exe //Nologo //B C:\Windows\System32\slmgr.vbs /ipk {})",
                                 productKey).c_str()) == 0) {
-        std::cout << "Product key installed successfully." << std::endl;
+        if (silent) { std::cout << "Product key installed successfully." << std::endl; }
     }
     if (!isIoTltsc) {
-        if (Confirmation("Do you want activate Windows with Online KMS?"
-                         "\nY - yes\nN - I want to activate myself / "
-                         "I will activate it later") == 0) {
+        if (!activate_windows) {
+            if (Confirmation("Do you want activate Windows with Online KMS?"
+                             "\nY - yes\nN - I want to activate myself / "
+                             "I will activate it later") == 0) {
+                std::system(R"(cscript.exe //Nologo //B C:\Windows\System32\slmgr.vbs /skms kms.loli.best)");
+                std::system(R"(cscript.exe //Nologo //B C:\Windows\System32\slmgr.vbs /ato)");
+            }
+        } else {
             std::system(R"(cscript.exe //Nologo //B C:\Windows\System32\slmgr.vbs /skms kms.loli.best)");
             std::system(R"(cscript.exe //Nologo //B C:\Windows\System32\slmgr.vbs /ato)");
         }
     } else {
-        if (Confirmation("Do you want activate Windows with HWID activation (only for IoT LTSC)?"
-                         "\nY - yes\nN - I want to activate myself / "
-                         "I will activate it later") == 0) {
+        if (!activate_windows) {
+            if (Confirmation("Do you want activate Windows with HWID activation (only for IoT LTSC)?"
+                             "\nY - yes\nN - I want to activate myself / "
+                             "I will activate it later") == 0) {
+                std::system(("\"" + ProgramPath + R"(\files\IOT_LTSC_ACTIVATION.cmd")").c_str());
+            }
+        } else {
             std::system(("\"" + ProgramPath + R"(\files\IOT_LTSC_ACTIVATION.cmd")").c_str());
         }
     }
@@ -175,7 +184,7 @@ int ActivateWindows(const std::string &productKey, const bool &isLTSC, const boo
 }
 
 
-void Windows1110Activation(int option) {
+void Windows1110Activation(int option, bool silent, bool activate_windows) {
     // Windows 10/11
     std::map<std::string, std::string> w10_keys = {
             {"1",  "TX9XD-98N7V-6WMQ6-BX7FG-H8Q99"}, // Home
@@ -192,38 +201,39 @@ void Windows1110Activation(int option) {
             {"12", "QPM6N-7J2WJ-P88HH-P3YRH-YY74H"}, // IoT LTSC
     };
 
-    if (Confirmation() == -1) { MainMenu(); }
+    if (Confirmation() == -1) { MainMenu(silent, activate_windows); }
     else {
         auto res = w10_keys.find(std::to_string(option));
-        if (res != w10_keys.end()) { ActivateWindows(res->second, (option == 11), (option == 12), 1); }
+        if (res != w10_keys.end()) {
+            ActivateWindows(res->second, (option == 11), (option == 12), 1, silent, activate_windows);
+        }
     }
 }
 
-void Windows7Activation(int option) {
+void Windows7Activation(int option, bool silent, bool activate_windows) {
     // Windows 10/11
     std::map<std::string, std::string> w10_keys = {
             {"1", "FJ82H-XT6CR-J8D7P-XQJJ2-GPDD4"}, // Professional
             {"2", "33PXH-7Y6KF-2VJC9-XBBR8-HVTHH"}, // Enterprise
     };
 
-    if (Confirmation() == -1) { MainMenu(); }
+    if (Confirmation() == -1) { MainMenu(silent, activate_windows); }
     else {
         auto res = w10_keys.find(std::to_string(option));
-        if (res != w10_keys.end()) { ActivateWindows(res->second, false, false, 4); }
+        if (res != w10_keys.end()) { ActivateWindows(res->second, false, false, 4, silent, activate_windows); }
     }
 }
 
 
-void MainMenu() {
+void MainMenu(bool silent, bool activate_windows) {
     std::system("cls");
-    std::vector<std::string> menu = {
-            "-----------------------",
-            "| 1. Windows 11 menu  |",
-            "| 2. Windows 10 menu  |",
-            "| 3. Windows 8 menu   |",
-            "| 4. Windows 7 menu   |",
-            "-----------------------"
-    };
+    std::string menu = R"(
+-----------------------
+| 1. Windows 11 menu  |
+| 2. Windows 10 menu  |
+| 3. Windows 8 menu   |
+| 4. Windows 7 menu   |
+-----------------------)";
 
     int value;
     GenerateMessage("Select choice", menu);
@@ -231,10 +241,9 @@ void MainMenu() {
     std::cout << ">>> ";
     std::cin >> value;
 
-    // TODO: complete this code (2)
-    if (value == 1) { Windows11Menu(); }
-    else if (value == 2) { Windows10Menu(); }
-    else if (value == 4) { Windows7Menu(); }
+    if (value == 1) { Windows11Menu(silent, activate_windows); }
+    else if (value == 2) { Windows10Menu(silent, activate_windows); }
+    else if (value == 4) { Windows7Menu(silent, activate_windows); }
     else { std::cout << "This option is not implemented. Wait new release! :)" << std::endl; }
     std::cout << "Press any key to exit from program..." << std::endl;
     std::cin.ignore();
@@ -243,7 +252,13 @@ void MainMenu() {
 }
 
 
-int main() {
+std::vector<std::string> GetFlagsFromCommandLine(int argc, char *argv[]) {
+    std::vector<std::string> flags;
+    for (int i = 1; i < argc; ++i) { flags.emplace_back(argv[i]); }
+    return flags;
+}
+
+int main(int argc, char *argv[]) {
     if (IsRunAsAdmin()) {
         int result = std::system(std::string(
                 "powershell -Command \"$PSVersionTable.PSVersion.Major -ge 5\" | findstr False >NUL || exit /B 1").c_str());
@@ -259,14 +274,54 @@ int main() {
             std::cin.get();
             exit(0);
         }
-        MainMenu();
+
+        std::vector<std::string> flags = GetFlagsFromCommandLine(argc, argv);
+        bool silent = false;
+        bool activate_windows = false;
+        for (const std::string &flag: flags) {
+            if (flag == "--silent" || flag == "-s" || flag == "/silent" || flag == "/s") {
+                silent = true;
+            }
+            if (flag == "--activate" || flag == "-act" || flag == "/activate" || flag == "/act") {
+                activate_windows = true;
+            }
+            if (flag == "--help" || flag == "/help") {
+                std::cout
+                        << "Program Options:\noption(s) name\t\t\t\tdescription\n--silent (or -s, /silent, /s)\t\tdo not show information, "
+                        << "only select windows version and edition.\n--activate (or -act, /activate, "
+                        << "/act)\tactivate windows without confirmation."
+                        << std::endl;
+                std::cout << "Press any key to exit from program..." << std::endl;
+                std::cin.ignore();
+                std::cin.get();
+                exit(0);
+            }
+            std::cout << "Flag: " << flag << std::endl;
+        }
+        MainMenu(silent, activate_windows);
     } else {
         if (Confirmation("Run program with administrative rights\nY - Run\nN - Exit") != -1) {
             char buffer[MAX_PATH];
             GetModuleFileName(nullptr, buffer, MAX_PATH);
-            std::string runCommand = fmt::format("powershell -Command \"Start-Process '{}' -Verb RunAs\"",
-                                                 (std::string) buffer);
-            std::system(runCommand.c_str());
+            std::stringstream ss;
+            ss << "powershell -Command \"Start-Process -filepath '" << buffer;
+
+            // Проверяем наличие аргументов
+            if (argc > 1) {
+                ss << "' -ArgumentList ";
+
+                // Формируем строку с аргументами командной строки
+                std::string arguments;
+                for (int i = 1; i < argc; ++i) {
+                    arguments += " \"" + std::string(argv[i]) + "\"";
+                }
+
+                ss << "'" << arguments;
+            }
+
+            ss << "' -Verb RunAs\"";
+
+            std::system(ss.str().c_str());
         } else { exit(0); }
     }
 }
