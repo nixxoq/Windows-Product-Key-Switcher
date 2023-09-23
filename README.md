@@ -1,4 +1,4 @@
-# [Work In Progress] Windows Product Key Switcher (WPK Switcher)
+# Windows Product Key Switcher (WPK Switcher)
 
 Work with:
 - Windows 11/10 Education
