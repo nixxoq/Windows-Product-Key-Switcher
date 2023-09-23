@@ -306,11 +306,9 @@ int main(int argc, char *argv[]) {
             std::stringstream ss;
             ss << "powershell -Command \"Start-Process -filepath '" << buffer;
 
-            // Проверяем наличие аргументов
             if (argc > 1) {
                 ss << "' -ArgumentList ";
 
-                // Формируем строку с аргументами командной строки
                 std::string arguments;
                 for (int i = 1; i < argc; ++i) {
                     arguments += " \"" + std::string(argv[i]) + "\"";
