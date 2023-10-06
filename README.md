@@ -1,5 +1,9 @@
 # Windows Product Key Switcher (WPK Switcher)
 
+## Screenshot
+
+<img src="https://github.com/Snaky1a/Windows-Product-Key-Switcher/blob/main/images/main_program.png?raw=true" alt="picture">
+
 Work with:
 - Windows 11/10 Education
 - Windows 11/10 Professional
